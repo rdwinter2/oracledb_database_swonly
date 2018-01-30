@@ -1,0 +1,41 @@
+---
+
+# check if software already installed
+
+- name: "Copy {{ oracle_database.file_name }} to /u01/software"
+  get_url:
+    url: "{{ binaries_url}}/{{ oracle_database.file_name }}"
+    dest: "/u01/software"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_inventory_group }}"
+    mode: "u=rw,g=r,o=r"
+    checksum: sha256:{{ oracle_database.sha256 }}
+
+- name: Get the Oracle database software and unzip it
+  unarchive:
+    src: "/u01/software/{{ oracle_database.file_name }}"
+    dest: "/u01/software"
+    creates: "/u01/software/database"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_inventory_group }}"
+    remote_src: True
+
+- name: Install the datbase software in silent INSTALL_DB_SWONLY mode
+  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile /u01/software/database/response/db_install.rsp oracle.install.option=INSTALL_DB_SWONLY ORACLE_HOSTNAME={{ ansible_fqdn }} UNIX_GROUP_NAME={{ oracle_inventory_group }} INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en ORACLE_HOME=/u01/app/oracle/product/{{ oracle_version }}/dbhome_1 ORACLE_BASE=/u01/app/oracle oracle.install.db.InstallEdition=EE oracle.install.db.OSDBA_GROUP=dba oracle.install.db.OSBACKUPDBA_GROUP=backupdba oracle.install.db.OSDGDBA_GROUP=dgdba oracle.install.db.OSKMDBA_GROUP=kmdba oracle.install.db.OSRACDBA_GROUP=racdba SECURITY_UPDATES_VIA_MYORACLESUPPORT=false DECLINE_SECURITY_UPDATES=true"
+  args:
+    chdir: /u01/software/database
+    creates: "{{ oracle_home }}/root.sh"
+  run_once: true
+  become_user: "{{ oracle_user }}"
+
+- name: run the root scripts
+  command: "{{ item }}"
+  become: true
+  with_items:
+    - /u01/app/oraInventory/orainstRoot.sh
+    - "{{ oracle_home }}/root.sh"
+
+# Patch the software with the latest PSU
+# check patch level first
+
+# Cleanup the diskspace used during install
