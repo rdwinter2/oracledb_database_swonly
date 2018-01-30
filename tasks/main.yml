@@ -2,26 +2,35 @@
 
 # check if software already installed
 
-- name: "Copy {{ oracle_database.file_name }} to /u01/software"
+- name: Stage Oracle software to /u01/software
   get_url:
-    url: "{{ binaries_url}}/{{ oracle_database.file_name }}"
+    url: "{{ binaries_url}}/{{ item.file_name }}"
     dest: "/u01/software"
     owner: "{{ oracle_user }}"
     group: "{{ oracle_inventory_group }}"
     mode: "u=rw,g=r,o=r"
-    checksum: sha256:{{ oracle_database.sha256 }}
+    checksum: sha256:{{ item.sha256 }}
+  with_items: "{{ oracle_software }}"
 
-- name: Get the Oracle database software and unzip it
+- name: Unzip the Oracle software
   unarchive:
-    src: "/u01/software/{{ oracle_database.file_name }}"
-    dest: "/u01/software"
-    creates: "/u01/software/database"
+    src: "/u01/software/{{ item.file_name }}"
+    dest: "{{ item.unzip_dest }}"
+    creates: "{{ item.creates }}"
     owner: "{{ oracle_user }}"
     group: "{{ oracle_inventory_group }}"
     remote_src: True
+  with_items: "{{ oracle_software }}"
 
+- name: Response file for silent INSTALL_DB_SWONLY install
+  template:
+    src: swonly.rsp.j2
+    dest: /u01/software/swonly.rsp
+    owner: "{{ oracle_user }}"
+    mode: 0600
+    
 - name: Install the datbase software in silent INSTALL_DB_SWONLY mode
-  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile /u01/software/database/response/db_install.rsp oracle.install.option=INSTALL_DB_SWONLY ORACLE_HOSTNAME={{ ansible_fqdn }} UNIX_GROUP_NAME={{ oracle_inventory_group }} INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en ORACLE_HOME=/u01/app/oracle/product/{{ oracle_version }}/dbhome_1 ORACLE_BASE=/u01/app/oracle oracle.install.db.InstallEdition=EE oracle.install.db.OSDBA_GROUP=dba oracle.install.db.OSBACKUPDBA_GROUP=backupdba oracle.install.db.OSDGDBA_GROUP=dgdba oracle.install.db.OSKMDBA_GROUP=kmdba oracle.install.db.OSRACDBA_GROUP=racdba SECURITY_UPDATES_VIA_MYORACLESUPPORT=false DECLINE_SECURITY_UPDATES=true"
+  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile /u01/software/swonly.rsp"
   args:
     chdir: /u01/software/database
     creates: "{{ oracle_home }}/root.sh"
