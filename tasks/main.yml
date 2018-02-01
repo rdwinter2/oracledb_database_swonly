@@ -41,7 +41,7 @@
   command: "{{ item }}"
   become: true
   with_items:
-    - /u01/app/oraInventory/orainstRoot.sh
+    - "{{ oracle_inventory_location }}/orainstRoot.sh"
     - "{{ oracle_home }}/root.sh"
 
 #-----
