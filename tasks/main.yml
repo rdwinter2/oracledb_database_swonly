@@ -44,6 +44,14 @@
     - /u01/app/oraInventory/orainstRoot.sh
     - "{{ oracle_home }}/root.sh"
 
+#-----
+# clean up the temporary files
+#-----
+- name: FILE | Remove temporary install directory
+  file:
+    path: "/u01/software/database"
+    state: absent
+
 # Patch the software with the latest PSU
 # check patch level first
 
