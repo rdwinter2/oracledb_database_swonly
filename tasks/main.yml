@@ -1,0 +1,19 @@
+---
+
+# check if software already installed
+- name: Check if database software is already installed
+  stat:
+    path: "{{ oracle_home }}"
+  register: install_directory
+
+- name: Run the Oracle DB software only install
+  include_tasks: swonly.yml
+  when: not install_directory.exists
+
+- name: FILE | Remove temporary install directory
+  file:
+    path: "/u01/software/database"
+    state: absent
+
+# Patch the software with the latest PSU
+# check patch level first
