@@ -8,6 +8,7 @@ oracle_version: 12.2.0
 oracle_base:
 oracle_home: "{{ oracle_base }}/product/{{ oracle_version }}/dbhome_1"
 oracle_inventory_location: /u01/app/oraInventory
+apply_psu: true
 
 oracle_software:
   - name: "oracle_database"

@@ -1,52 +1,15 @@
 ---
 
 # check if software already installed
+- name: Check if database software is already installed
+  stat:
+    path: "{{ oracle_home }}"
+  register: install_directory
 
-- name: Stage Oracle software to /u01/software
-  get_url:
-    url: "{{ binaries_url}}/{{ item.file_name }}"
-    dest: "/u01/software"
-    owner: "{{ oracle_user }}"
-    group: "{{ oracle_inventory_group }}"
-    mode: "u=rw,g=r,o=r"
-    checksum: sha256:{{ item.sha256 }}
-  with_items: "{{ oracle_software }}"
+- name: Run the Oracle DB software only install
+  include_tasks: swonly.yml
+  when: not install_directory.exists
 
-- name: Unzip the Oracle software
-  unarchive:
-    src: "/u01/software/{{ item.file_name }}"
-    dest: "{{ item.unzip_dest }}"
-    creates: "{{ item.creates }}"
-    owner: "{{ oracle_user }}"
-    group: "{{ oracle_inventory_group }}"
-    remote_src: True
-  with_items: "{{ oracle_software }}"
-
-- name: Response file for silent INSTALL_DB_SWONLY install
-  template:
-    src: swonly.rsp.j2
-    dest: /u01/software/swonly.rsp
-    owner: "{{ oracle_user }}"
-    mode: 0600
-    
-- name: Install the datbase software in silent INSTALL_DB_SWONLY mode
-  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile /u01/software/swonly.rsp"
-  args:
-    chdir: /u01/software/database
-    creates: "{{ oracle_home }}/root.sh"
-  run_once: true
-  become_user: "{{ oracle_user }}"
-
-- name: run the root scripts
-  command: "{{ item }}"
-  become: true
-  with_items:
-    - "{{ oracle_inventory_location }}/orainstRoot.sh"
-    - "{{ oracle_home }}/root.sh"
-
-#-----
-# clean up the temporary files
-#-----
 - name: FILE | Remove temporary install directory
   file:
     path: "/u01/software/database"
@@ -54,5 +17,3 @@
 
 # Patch the software with the latest PSU
 # check patch level first
-
-# Cleanup the diskspace used during install
