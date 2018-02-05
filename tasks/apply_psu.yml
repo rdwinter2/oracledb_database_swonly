@@ -12,7 +12,7 @@
   with_items: "{{ opatch_software }}"
 
 # unarchive expands files under ~/.ansible/tmp first
-- name: Unzip the Oracle software
+- name: Unzip the OPatch software
   shell: unzip -o /u01/software/{{ item.file_name }} -d {{ oracle_home }}/
   register: unzip
   failed_when: unzip.rc != 0
@@ -47,6 +47,7 @@
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
+  with_items: "{{ oracle_psu }}"
   register: opatch_psu_apply
 
 - name: Delete the oracle_psu zip file
@@ -84,6 +85,7 @@
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
+  with_items: "{{ oracle_ojvm }}"
   register: opatch_ojvm_apply
 
 - name: Delete the OJVM zip file
