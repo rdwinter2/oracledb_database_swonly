@@ -43,7 +43,7 @@
   with_items: "{{ oracle_psu }}"
 
 - name: OPatch apply PSU
-  shell: yes | opatch apply
+  shell: yes | {{ oracle_home }}/OPatch/opatch apply
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
@@ -81,7 +81,7 @@
   with_items: "{{ oracle_ojvm }}"
 
 - name: OPatch apply OJVM
-  shell: yes | opatch apply
+  shell: yes | {{ oracle_home }}/OPatch/opatch apply
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
