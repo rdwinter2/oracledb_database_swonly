@@ -30,15 +30,20 @@
     checksum: sha256:{{ item.sha256 }}
   with_items: "{{ oracle_software }}"
 
+# unarchive expands files under ~/.ansible/tmp first
 - name: Unzip the Oracle software
-  unarchive:
-    src: "/u01/software/{{ item.file_name }}"
-    dest: "{{ item.unzip_dest }}"
-    creates: "{{ item.creates }}"
-    owner: "{{ oracle_user }}"
-    group: "{{ oracle_inventory_group }}"
-    remote_src:
-  with_items: "{{ oracle_software }}"
+  shell: unzip -o /u01/software/{{ oracle_software.file_name }} -d /u01/software
+  register: unzip
+  failed_when: unzip.rc != 0
+
+#  unarchive:
+#    src: "/u01/software/{{ item.file_name }}"
+#    dest: "{{ item.unzip_dest }}"
+#    creates: "{{ item.creates }}"
+#    owner: "{{ oracle_user }}"
+#    group: "{{ oracle_inventory_group }}"
+#    remote_src:
+#  with_items: "{{ oracle_software }}"
 
 - name: Response file for silent INSTALL_DB_SWONLY install
   template:
