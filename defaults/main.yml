@@ -10,6 +10,11 @@ oracle_home: "{{ oracle_base }}/product/{{ oracle_version }}/dbhome_1"
 oracle_inventory_location: /u01/app/oraInventory
 apply_psu: true
 
+oracle_directories:
+  - { dir: "/u01", owner: "{{ oracle_user }}", group: "{{ oracle_inventory_group }}", mode: "u=rwx,g=rwx,o=rx" }
+  - { dir: "/u01/tmp", owner: "{{ oracle_user }}", group: "{{ oracle_inventory_group }}", mode: "u=rwx,g=rwx,o=rx" }
+  - { dir: "/u01/software", owner: "{{ oracle_user }}", group: "{{ oracle_inventory_group }}", mode: "u=rwx,g=rwx,o=rx" }
+
 oracle_software:
   - name: "oracle_database"
     file_name: linuxx64_12201_database.zip
