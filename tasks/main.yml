@@ -1,5 +1,14 @@
 ---
 
+- name: Create oracle install directories
+  file:
+    path: "{{ item.dir }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ oracle_directories }}"
+
 # check if software already installed
 - name: Check if database software is already installed
   stat:
