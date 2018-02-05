@@ -6,6 +6,37 @@
     path: "{{ oracle_home }}"
   register: install_directory
 
+- name: Check if /etc/oratab exists
+  stat:
+    path: /etc/oratab
+  register: oratab
+
+- debug:
+    msg: "/etc/oratab does not exists"
+  when: oratab.stat.exists == false
+
+- name: Check if unzip exists
+  shell: "command -v unzip"
+  register: unzip_exists
+
+- debug:
+    msg: "unzip cannot be found"
+  when: unzip_exists == false
+
+- name: Upgrade opatch
+  shell: unzip -o /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip -d /u01/oracle/11204
+  register: unzip
+  failed_when: unzip.rc != 0
+
+- name: Cleanup the zipfile from the target home
+  file:
+    name: /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip
+    state: absent
+
+
+
+# opatch lsinventory
+
 - name: Run the Oracle DB software only install
   include_tasks: swonly.yml
   when: not install_directory.exists

@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: Bob Winter
+  description: A role to install Oracle Enterprise Database software only
+  company:
+  issue_tracker_url:
+  license: TBD
+  min_ansible_version: 2.0
+  platforms:
+  - name: EL
+    versions:
+    - 7
+dependencies: []
