@@ -27,6 +27,7 @@
     owner: "{{ oracle_user }}"
     group: "{{ oracle_inventory_group }}"
     mode: "u=rw,g=r,o=r"
+    tmp_dest: "{{ tmp_dest }}"
     checksum: sha256:{{ item.sha256 }}
   with_items: "{{ oracle_software }}"
 
