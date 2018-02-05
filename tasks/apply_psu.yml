@@ -43,7 +43,7 @@
   with_items: "{{ oracle_psu }}"
 
 - name: OPatch apply PSU
-  shell: {{ oracle_home }}/OPatch/opatch apply -silent
+  shell: "{{ oracle_home }}/OPatch/opatch apply -silent"
   become_user: "{{ oracle_user }}"
   args:
     chdir: /u01/software/{{ item.patch_num }}
@@ -82,7 +82,7 @@
   with_items: "{{ oracle_ojvm }}"
 
 - name: OPatch apply OJVM
-  shell: {{ oracle_home }}/OPatch/opatch apply -silent
+  shell: "{{ oracle_home }}/OPatch/opatch apply -silent"
   become_user: "{{ oracle_user }}"
   args:
     chdir: /u01/software/{{ item.patch_num }}
