@@ -34,12 +34,12 @@ oracle_software:
     checksum: 2459635570
     sha256: ffc7eb6625b3d515d7713f605e8014663d0cebc3a6aa06fd48d0ad42aec1962c
 
-  - name: "oracle_gi_update"
-    file_name: p27100009_122010_Linux-x86-64.zip
-    description: GI Jan 2018 Update 12.2.0.1.180116
-    url: http://www.oracle.com/technetwork/security-advisory/cpujan2018-3236628.html
-    checksum: 2799169380
-    sha256: 593285ab46f492d222c631e17b08ba1a650b7f910cabf9a44438a52de38da90c
+#  - name: "oracle_gi_update"
+#    file_name: p27100009_122010_Linux-x86-64.zip
+#    description: GI Jan 2018 Update 12.2.0.1.180116
+#    url: http://www.oracle.com/technetwork/security-advisory/cpujan2018-3236628.html
+#    checksum: 2799169380
+#    sha256: 593285ab46f492d222c631e17b08ba1a650b7f910cabf9a44438a52de38da90c
 
   - name: "ojvm_update"
     file_name: p27001739_122010_Linux-x86-64.zip
