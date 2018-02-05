@@ -36,4 +36,5 @@ MIT
 
 ## References
 
+* [oravirt/ansible-oracle](https://github.com/oravirt/ansible-oracle)
 * [Simple Steps To Perform Opatch Maintenance With Ansible](https://blog.pythian.com/opatch-maintenance-with-ansible/)
