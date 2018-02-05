@@ -39,6 +39,7 @@
 
 - name: Unzip the PSU software
   shell: unzip -o /u01/software/{{ item.file_name }} -d /u01/software
+  become_user: "{{ oracle_user }}"
   register: unzip
   failed_when: unzip.rc != 0
   with_items: "{{ oracle_psu }}"
@@ -78,6 +79,7 @@
 
 - name: Unzip the OJVM software
   shell: unzip -o /u01/software/{{ item.file_name }} -d /u01/software
+  become_user: "{{ oracle_user }}"
   register: unzip
   failed_when: unzip.rc != 0
   with_items: "{{ oracle_ojvm }}"
