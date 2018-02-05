@@ -5,7 +5,7 @@ binaries_url: http://repo/binaries
 oracle_user: oracle
 oracle_inventory_group: oinstall
 oracle_version: 12.2.0
-oracle_base:
+oracle_base: /u01/app/oracle
 oracle_home: "{{ oracle_base }}/product/{{ oracle_version }}/dbhome_1"
 oracle_inventory_location: /u01/app/oraInventory
 apply_psu: true

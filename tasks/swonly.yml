@@ -31,12 +31,18 @@
     checksum: sha256:{{ item.sha256 }}
   with_items: "{{ oracle_software }}"
 
+- name: Check if Oracle software is already unzipped
+  stat:
+    path: /u01/software/database
+  register: oracle_software_unzipped
+
 # unarchive expands files under ~/.ansible/tmp first
 - name: Unzip the Oracle software
   shell: unzip -o /u01/software/{{ item.file_name }} -d /u01/software
   register: unzip
   failed_when: unzip.rc != 0
   with_items: "{{ oracle_software }}"
+  when: oracle_software_unzipped.stat.exists == false
 
 #  unarchive:
 #    src: "/u01/software/{{ item.file_name }}"
