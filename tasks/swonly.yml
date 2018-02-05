@@ -1,5 +1,25 @@
 ---
 
+#- name: Stage Oracle software to /u01/software
+#  get_url:
+#    url: "{{ binaries_url}}/{{ item.file_name }}"
+#    dest: "/u01/software"
+#    owner: "{{ oracle_user }}"
+#    group: "{{ oracle_inventory_group }}"
+#    mode: "u=rw,g=r,o=r"
+#    checksum: sha256:{{ item.sha256 }}
+#  with_items: "{{ oracle_software }}"
+#
+#- name: Unzip the Oracle software
+#  unarchive:
+#    src: "/u01/software/{{ item.file_name }}"
+#    dest: "{{ item.unzip_dest }}"
+#    creates: "{{ item.creates }}"
+#    owner: "{{ oracle_user }}"
+#    group: "{{ oracle_inventory_group }}"
+#    remote_src: True
+#  with_items: "{{ oracle_software }}"
+
 - name: Stage Oracle software to /u01/software
   get_url:
     url: "{{ binaries_url}}/{{ item.file_name }}"
@@ -17,7 +37,7 @@
     creates: "{{ item.creates }}"
     owner: "{{ oracle_user }}"
     group: "{{ oracle_inventory_group }}"
-    remote_src: True
+    remote_src:
   with_items: "{{ oracle_software }}"
 
 - name: Response file for silent INSTALL_DB_SWONLY install

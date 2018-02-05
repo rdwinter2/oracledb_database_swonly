@@ -25,6 +25,7 @@ oracle_software:
     checksum: 4170261901
     sha256: 96ed97d21f15c1ac0cce3749da6c3dac7059bb60672d76b008103fc754d22dde
 
+opatch_software:
   - name: "opatch_update"
     file_name: p6880880_122010_Linux-x86-64.zip 
     description: Opatch utility last_updated 18-JAN-2018
@@ -32,6 +33,7 @@ oracle_software:
     checksum: 3569976014
     sha256: 5bd98a31c8e134dff1de833ffa0834d62c606036a1626af6ed529854d215707f
 
+oracle_psu:
   - name: "oracle_database_update"
     file_name: p27105253_122010_Linux-x86-64.zip
     description: Database Jan 2018 Update 12.2.0.1.180116
@@ -46,6 +48,7 @@ oracle_software:
 #    checksum: 2799169380
 #    sha256: 593285ab46f492d222c631e17b08ba1a650b7f910cabf9a44438a52de38da90c
 
+oracle_ojvm:
   - name: "ojvm_update"
     file_name: p27001739_122010_Linux-x86-64.zip
     description: OJVM Update 12.2.0.1.180116
