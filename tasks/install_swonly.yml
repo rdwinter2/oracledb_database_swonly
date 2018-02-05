@@ -56,12 +56,13 @@
 - name: Response file for silent INSTALL_DB_SWONLY install
   template:
     src: swonly.rsp.j2
-    dest: /u01/software/swonly.rsp
+    dest: ~/swonly.rsp
     owner: "{{ oracle_user }}"
     mode: 0600
+  become_user: "{{ oracle_user }}"
 
 - name: Install the datbase software in silent INSTALL_DB_SWONLY mode
-  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile /u01/software/swonly.rsp"
+  shell: ". /home/oracle/.bashrc && ./runInstaller -waitforcompletion -ignoreSysPrereqs -showProgress -silent -responseFile ~/swonly.rsp"
   args:
     chdir: /u01/software/database
     creates: "{{ oracle_home }}/root.sh"
@@ -74,6 +75,21 @@
   with_items:
     - "{{ oracle_inventory_location }}/orainstRoot.sh"
     - "{{ oracle_home }}/root.sh"
+
+- name: Delete the oracle_software zip file
+  file:
+    name: "/u01/software/{{ item.file_name }}"
+    state: absent
+  with_items: "{{ oracle_software }}"
+
+- name: Remove temporary install directory
+  file:
+    path: "/u01/software/database"
+    state: absent
+
+- name: Patch the Oracle DB software only install
+  include_tasks: apply_psu.yml
+  when: apply_psu
 
 # Patch the software with the latest PSU
 # check patch level first

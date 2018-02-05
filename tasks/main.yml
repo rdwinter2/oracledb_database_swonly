@@ -9,48 +9,49 @@
     mode: "{{ item.mode }}"
   with_items: "{{ oracle_directories }}"
 
-# check if software already installed
-- name: Check if database software is already installed
+# check if the software is already installed
+# additional checks can verify that the install was for the desired oracle_home
+- name: Set variable install_oracle_swonly to true
+  set_fact:
+    install_oracle_swonly: true
+
+- name: Check if /etc/oraInst.loc exists
   stat:
-    path: "{{ oracle_home }}"
-  register: install_directory
+    path: /etc/oraInst.loc
+  register: oraInst
 
-- name: Check if /etc/oratab exists
-  stat:
-    path: /etc/oratab
-  register: oratab
+- name: Set variable install_oracle_swonly to false
+  set_fact:
+    install_oracle_swonly: false
+  when: oraInst.exists
 
-- debug:
-    msg: "/etc/oratab does not exists"
-  when: oratab.stat.exists == false
+#- name: Check if database software is already installed
+#  stat:
+#    path: "{{ oracle_home }}"
+#  register: install_directory
+#
+#- name: Check if /etc/oratab exists
+#  stat:
+#    path: /etc/oratab
+#  register: oratab
+#
+#- debug:
+#    msg: "/etc/oratab does not exists"
+#  when: oratab.stat.exists == false
 
-- name: Check if unzip exists
-  shell: "command -v unzip"
-  register: unzip_exists
-
-- debug:
-    msg: "unzip cannot be found"
-  when: unzip_exists == false
+#- name: Check if unzip exists
+#  shell: "command -v unzip"
+#  register: unzip_exists
+#
+#- debug:
+#    msg: "unzip cannot be found"
+#  when: unzip_exists == false
 
 # opatch lsinventory
 
 - name: Run the Oracle DB software only install
-  include_tasks: swonly.yml
-  when: not install_directory.exists
-
-- name: Upgrade opatch
-  shell: unzip -o /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip -d /u01/oracle/11204
-  register: unzip
-  failed_when: unzip.rc != 0
-
-- name: Cleanup the zipfile from the target home
-  file:
-    name: /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip
-    state: absent
-- name: FILE | Remove temporary install directory
-  file:
-    path: "/u01/software/database"
-    state: absent
+  include_tasks: install_swonly.yml
+  when: install_oracle_swonly
 
 # Patch the software with the latest PSU
 # check patch level first

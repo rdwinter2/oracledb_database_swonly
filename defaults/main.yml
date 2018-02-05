@@ -28,6 +28,7 @@ oracle_software:
 
 opatch_software:
   - name: "opatch_update"
+    patch_num: 6880880
     file_name: p6880880_122010_Linux-x86-64.zip 
     description: Opatch utility last_updated 18-JAN-2018
     url: https://updates.oracle.com/download/6880880.html
@@ -36,6 +37,7 @@ opatch_software:
 
 oracle_psu:
   - name: "oracle_database_update"
+    patch_num: 27105253
     file_name: p27105253_122010_Linux-x86-64.zip
     description: Database Jan 2018 Update 12.2.0.1.180116
     url: http://www.oracle.com/technetwork/security-advisory/cpujan2018-3236628.html
@@ -51,6 +53,7 @@ oracle_psu:
 
 oracle_ojvm:
   - name: "ojvm_update"
+    patch_num: 27001739
     file_name: p27001739_122010_Linux-x86-64.zip
     description: OJVM Update 12.2.0.1.180116
     url: http://www.oracle.com/technetwork/security-advisory/cpujan2018-3236628.html
