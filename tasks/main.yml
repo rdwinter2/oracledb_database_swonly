@@ -23,7 +23,7 @@
 - name: Set variable install_oracle_swonly to false
   set_fact:
     install_oracle_swonly: false
-  when: oraInst.exists
+  when: oraInst.stat.exists
 
 #- name: Check if database software is already installed
 #  stat:
