@@ -44,6 +44,7 @@
 
 - name: OPatch apply PSU
   shell: yes | {{ oracle_home }}/OPatch/opatch apply
+  become_user: "{{ oracle_user }}"
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
@@ -82,6 +83,7 @@
 
 - name: OPatch apply OJVM
   shell: yes | {{ oracle_home }}/OPatch/opatch apply
+  become_user: "{{ oracle_user }}"
   args:
     chdir: /u01/software/{{ item.patch_num }}
 #    creates: "{{ oracle_home }}/root.sh"
