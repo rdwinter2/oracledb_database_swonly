@@ -23,6 +23,12 @@
     msg: "unzip cannot be found"
   when: unzip_exists == false
 
+# opatch lsinventory
+
+- name: Run the Oracle DB software only install
+  include_tasks: swonly.yml
+  when: not install_directory.exists
+
 - name: Upgrade opatch
   shell: unzip -o /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip -d /u01/oracle/11204
   register: unzip
@@ -32,15 +38,6 @@
   file:
     name: /u01/oracle/11204/p6880880_112000_Linux-x86-64.zip
     state: absent
-
-
-
-# opatch lsinventory
-
-- name: Run the Oracle DB software only install
-  include_tasks: swonly.yml
-  when: not install_directory.exists
-
 - name: FILE | Remove temporary install directory
   file:
     path: "/u01/software/database"
