@@ -32,9 +32,10 @@
 
 # unarchive expands files under ~/.ansible/tmp first
 - name: Unzip the Oracle software
-  shell: unzip -o /u01/software/{{ oracle_software.file_name }} -d /u01/software
+  shell: unzip -o /u01/software/{{ item.file_name }} -d /u01/software
   register: unzip
   failed_when: unzip.rc != 0
+  with_items: "{{ oracle_software }}"
 
 #  unarchive:
 #    src: "/u01/software/{{ item.file_name }}"
