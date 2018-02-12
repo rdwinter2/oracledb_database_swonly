@@ -1,0 +1,10 @@
+---
+#Note, the protocol (e.g. https/ssh) and base URL string will likely vary from
+#environment to environment.  Make a new version of this file as appropriate.
+
+#- src: {{ base_url }}ispanauto/.git
+#  scm: git
+#  version:
+
+#- src: $BASE_SCM_URL
+- src:
